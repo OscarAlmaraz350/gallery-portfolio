@@ -1,0 +1,290 @@
+/* RESET BÁSICO */
+body {
+  background: #0d0d0d;
+  color: white;
+  font-family: system-ui, sans-serif;
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    flex-direction: column;
+  }
+
+  .modal-content img,
+  .modal-info {
+    width: 100%;
+  }
+}
+/* HERO (logo centrado) */
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: 40px 20px;
+  text-align: center;
+}
+
+/* LOGO */
+.logo {
+  height: 350px;
+  object-fit: contain;
+  margin-bottom: 15px;
+}
+
+/* REDES */
+.socials {
+  display: flex;
+  gap: 15px;
+}
+
+.socials a {
+  text-decoration: none;
+  color: white;
+  font-size: 16px;
+}
+
+/* GALERÍA */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  padding: 20px;
+}
+
+.gallery img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  border-radius: 12px;
+  cursor: pointer;
+
+  transition: transform 0.25s ease, filter 0.25s ease, box-shadow 0.25s ease;
+}
+
+.gallery img:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+
+.gallery-item {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.gallery-item img {
+  width: 100%;
+  display: block;
+}
+
+.gallery-item:hover .overlay {
+  opacity: 1;
+}
+
+.gallery-item:hover .overlay-title {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* MODAL */
+.modal {
+  position: fixed;
+  inset: 0;
+
+  display: none;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(10px);
+}
+
+.modal.active {
+  display: flex;
+}
+
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.modal-content {
+  display: flex;
+  gap: 20px;
+
+  max-width: 900px;
+  width: 90%;
+
+  position: relative;
+  padding: 20px;
+
+
+  background: transparent;
+
+  border-radius: 16px;
+}
+
+.modal-info {
+  opacity: 1 !important;
+  width: auto;
+  min-width: 160px;
+  gap: 10px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.modal-content img {
+  width: 50%;
+  max-height: 80vh;
+
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+.modal-content > *:not(img) {
+  opacity: 0;
+}
+#modalTitle {
+  font-size: 1.4rem;
+  margin-bottom: 8px;
+}
+
+#modalDesc {
+  opacity: 0.7;
+  font-size: 0.95rem;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.overlay-title {
+  color: white;
+  font-size: 18px;
+
+  transform: translateY(20px);
+  opacity: 0;
+
+  transition: all 0.3s ease;
+}
+
+/* BOTÓNES CERRAR/DESCARGAR */
+button {
+  margin-top: 12px;
+  padding: 10px 16px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #222;
+  color: white;
+
+  cursor: pointer;
+
+  transition: background 0.2s ease;
+}
+
+button:hover {
+  background: #333;
+  transform: translateY(-2px);
+}
+
+#downloadBtn {
+  display: inline-block;
+
+  background: #222;
+  color: #fff;
+
+  border: 1px solid #444;
+  border-radius: 8px;
+
+  padding: 10px 16px;
+  margin-top: 12px;
+
+  font-size: 14px;
+
+  opacity: 1;           
+  visibility: visible;  
+
+  z-index: 10;
+}
+
+
+.btn {
+  position: relative;
+  padding: 6px 12px;
+  font-size: 11px;
+
+  border: none;
+  outline: none;
+
+  background: #111;
+  color: white;
+
+  cursor: pointer;
+
+  border-radius: 6px;
+  overflow: hidden;
+
+  transition: color 0.3s ease;
+}
+
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255,255,255,0.3),
+    transparent
+  );
+
+  transform: translateX(-100%);
+  transition: transform 0.5s ease;
+}
+
+.btn:hover::before {
+  transform: translateX(100%);
+}
+
+.btn-premium {
+  background: linear-gradient(135deg, #500f85, #6d0786);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+/* BOTÓN CERRAR */
+#closeModal {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+
+  background: transparent;
+  color: white;
+  border: none;
+
+  font-size: 20px;
+  cursor: pointer;
+}
