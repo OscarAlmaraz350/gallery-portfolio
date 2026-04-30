@@ -1,5 +1,6 @@
 declare const anime: any;
 let currentImgElement: HTMLImageElement | null = null;
+
 /* =========================
    TIPOS
 ========================= */
@@ -73,6 +74,7 @@ if (premiumBtn) {
    RENDER
 ========================= */
 function renderGallery() {
+  
   gallery.innerHTML = "";
 
   items.forEach(item => {
@@ -89,6 +91,7 @@ function renderGallery() {
     const title = document.createElement("span");
     title.className = "overlay-title";
     title.textContent = item.title;
+    title.className = "overlay-title";
 
     overlay.appendChild(title);
     card.appendChild(img);
@@ -104,64 +107,69 @@ function renderGallery() {
 
       card.appendChild(badge);
     }
+    card.addEventListener("mouseenter", () => {
+      const text = card.querySelector(".overlay-title");
+
+      anime({
+        targets: text,
+        translateY: [20, 0],
+        opacity: [0, 1],
+        duration: 400,
+        easing: "easeOutQuad"
+      });
+    });
+    card.addEventListener("mouseleave", () => {
+      const text = card.querySelector(".overlay-title") as HTMLElement;
+
+      text.style.opacity = "0";
+      text.style.transform = "translateY(20px)";
+    });
     gallery.appendChild(card);
   });
-
+  
 }
 
 /* =========================
    MODAL
 ========================= */
-function openModal(item: GalleryItem, imgElement?: HTMLImageElement) {
-  currentImgElement = imgElement || null;
+function openModal(item: GalleryItem, imgElement: HTMLImageElement) {
   currentItem = item;
+  currentImgElement = imgElement; 
 
-  if (!imgElement) return;
+  document.body.classList.add("modal-open");
+  document.body.style.overflow = "hidden";
 
   const rect = imgElement.getBoundingClientRect();
 
-  document.body.classList.add("modal-open");
   // Crear clon
   const clone = document.createElement("img");
   clone.src = item.image;
+
   clone.style.position = "fixed";
   clone.style.top = rect.top + "px";
   clone.style.left = rect.left + "px";
   clone.style.width = rect.width + "px";
   clone.style.height = rect.height + "px";
   clone.style.objectFit = "cover";
-  clone.style.zIndex = "9999";
   clone.style.borderRadius = "12px";
+  clone.style.zIndex = "9999";
 
   document.body.appendChild(clone);
 
-  // 🔥 Preparamos modal (pero oculto)
-  modal.classList.add("active");
+  // Preparar modal (invisible)
+  modal.classList.add("show");
   modal.style.opacity = "0";
 
   modalImage.src = item.image;
   modalTitle.textContent = item.title;
 
-  document.body.style.overflow = "hidden";
-
-  modal.classList.add("active");
-  modal.style.opacity = "0";
-
-  /* 🔥 ocultar contenido */
   const content = modal.querySelector(".modal-content") as HTMLElement;
   content.style.opacity = "0";
-  content.style.transform = "scale(0.95)";
-  // 🔥 Esperar a que el modal esté en layout
+
+  // Esperar layout
   requestAnimationFrame(() => {
     const targetRect = modalImage.getBoundingClientRect();
 
-    
-    anime({
-      targets: modal,
-      opacity: [0, 1],
-      duration: 300,
-      easing: "easeOutQuad"
-    });
     anime({
       targets: clone,
       top: targetRect.top,
@@ -173,20 +181,13 @@ function openModal(item: GalleryItem, imgElement?: HTMLImageElement) {
       complete: () => {
         clone.remove();
 
+        // Mostrar modal real
         modal.style.opacity = "1";
 
         anime({
           targets: ".modal-content",
           scale: [0.95, 1],
           opacity: [0, 1],
-          duration: 250,
-          easing: "cubicBezier(0.4, 0, 0.2, 1)"
-        });
-        anime({
-          targets: "#modalTitle, #modalDesc, #downloadBtn",
-          opacity: [0, 1],
-          translateY: [10, 0],
-          delay: anime.stagger(80),
           duration: 250,
           easing: "easeOutQuad"
         });
@@ -199,17 +200,16 @@ function openModal(item: GalleryItem, imgElement?: HTMLImageElement) {
 
 
 function closeModal() {
-  
   if (!currentImgElement) {
-    modal.classList.remove("active");
+    modal.classList.remove("show");
     document.body.style.overflow = "";
     return;
   }
 
   const modalRect = modalImage.getBoundingClientRect();
   const targetRect = currentImgElement.getBoundingClientRect();
-  document.body.classList.remove("modal-open");
 
+  // Crear clon desde el modal
   const clone = document.createElement("img");
   clone.src = modalImage.src;
 
@@ -219,23 +219,15 @@ function closeModal() {
   clone.style.width = modalRect.width + "px";
   clone.style.height = modalRect.height + "px";
   clone.style.objectFit = "cover";
-  clone.style.zIndex = "9999";
   clone.style.borderRadius = "12px";
+  clone.style.zIndex = "9999";
 
   document.body.appendChild(clone);
 
-  modal.classList.remove("active");
+  // Ocultar modal visualmente
   modal.style.opacity = "0";
 
-  setTimeout(() => {
-    modal.classList.remove("active");
-  }, 180);
-  anime({
-    targets: modal,
-    opacity: [1, 0],
-    duration: 200,
-    easing: "easeInQuad"
-  });
+  // Animación de regreso
   anime({
     targets: clone,
     top: targetRect.top,
@@ -243,12 +235,14 @@ function closeModal() {
     width: targetRect.width,
     height: targetRect.height,
     duration: 400,
-    easing: "cubicBezier(0.4, 0, 0.2, 1)",
+    easing: "easeInOutQuad",
     complete: () => {
       clone.remove();
+      modal.classList.remove("show");
     }
   });
 
+  document.body.classList.remove("modal-open");
   document.body.style.overflow = "";
 }
 
