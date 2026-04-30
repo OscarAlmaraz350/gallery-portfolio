@@ -10,6 +10,7 @@ type GalleryItem = {
   description: string;
   filename: string;
   premiumLink: string;
+  isPremium?: boolean;
 };
 
 /* =========================
@@ -22,7 +23,8 @@ const items: GalleryItem[] = [
     title: "Dibujo 1",
     description: "Este es mi primer dibujo",
     filename: "dibujo-1.jpg",
-    premiumLink: "https://www.patreon.com/tu_usuario"
+    premiumLink: "https://www.patreon.com/tu_usuario",
+    isPremium: true
   },
   {
     id: 2,
@@ -30,7 +32,8 @@ const items: GalleryItem[] = [
     title: "Dibujo 2",
     description: "Otro dibujo",
     filename: "dibujo-2.jpg",
-    premiumLink: "https://www.patreon.com/tu_usuario"
+    premiumLink: "https://www.patreon.com/tu_usuario",
+    isPremium: false
   },
   {
     id: 3,
@@ -38,7 +41,8 @@ const items: GalleryItem[] = [
     title: "Dibujo 3",
     description: "Un tercer dibujo",
     filename: "dibujo-3.jpg",
-    premiumLink: "https://www.patreon.com/tu_usuario"
+    premiumLink: "https://www.patreon.com/tu_usuario",
+    isPremium: false
   }
 ];
 
@@ -93,9 +97,16 @@ function renderGallery() {
     card.onclick = () => {
       openModal(item, img);
     };
+    if (item.isPremium) {
+      const badge = document.createElement("div");
+      badge.className = "premium-badge";
+      badge.textContent = "EXTRA CONTENT ON PATREON";
 
+      card.appendChild(badge);
+    }
     gallery.appendChild(card);
   });
+
 }
 
 /* =========================
@@ -109,7 +120,8 @@ function openModal(item: GalleryItem, imgElement?: HTMLImageElement) {
 
   const rect = imgElement.getBoundingClientRect();
 
-  // 🔥 Crear clon
+  document.body.classList.add("modal-open");
+  // Crear clon
   const clone = document.createElement("img");
   clone.src = item.image;
   clone.style.position = "fixed";
@@ -196,6 +208,7 @@ function closeModal() {
 
   const modalRect = modalImage.getBoundingClientRect();
   const targetRect = currentImgElement.getBoundingClientRect();
+  document.body.classList.remove("modal-open");
 
   const clone = document.createElement("img");
   clone.src = modalImage.src;
