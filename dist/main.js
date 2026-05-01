@@ -7,7 +7,7 @@ const items = [
     {
         id: 1,
         image: "assets/dibujo1.jpg",
-        title: "Dibujo 1",
+        title: "MISIDE: MITA",
         description: "Este es mi primer dibujo",
         filename: "dibujo-1.jpg",
         premiumLink: "https://www.patreon.com/tu_usuario",
@@ -16,7 +16,7 @@ const items = [
     {
         id: 2,
         image: "assets/dibujo2.jpg",
-        title: "Dibujo 2",
+        title: "RAORA PANTHERA: NURSE OUTFIT",
         description: "Otro dibujo",
         filename: "dibujo-2.jpg",
         premiumLink: "https://www.patreon.com/tu_usuario",
@@ -25,7 +25,7 @@ const items = [
     {
         id: 3,
         image: "assets/dibujo3.jpg",
-        title: "Dibujo 3",
+        title: "SAYNOZ X SLUMLORD: CROSS",
         description: "Un tercer dibujo",
         filename: "dibujo-3.jpg",
         premiumLink: "https://www.patreon.com/tu_usuario",
@@ -125,6 +125,20 @@ function openModal(item, imgElement) {
     modal.style.opacity = "0";
     modalImage.src = item.image;
     modalTitle.textContent = item.title;
+    if (currentItem.isPremium) {
+        premiumBtn.style.display = "block";
+        premiumBtn.textContent = "Get Patreon Content";
+    }
+    else {
+        premiumBtn.style.display = "none";
+    }
+    const premiumNote = document.getElementById("premiumNote");
+    if (currentItem.isPremium) {
+        premiumNote.textContent = "Includes high resolution and extra content";
+    }
+    else {
+        premiumNote.textContent = "";
+    }
     const content = modal.querySelector(".modal-content");
     content.style.opacity = "0";
     // Esperar layout
@@ -148,6 +162,13 @@ function openModal(item, imgElement) {
                     opacity: [0, 1],
                     duration: 250,
                     easing: "easeOutQuad"
+                });
+                anime({
+                    targets: premiumBtn,
+                    scale: [1, 1.05, 1],
+                    duration: 600,
+                    easing: "easeInOutQuad",
+                    delay: 300
                 });
             }
         });
@@ -206,10 +227,7 @@ function downloadImage() {
 function goToPremium() {
     if (!currentItem)
         return;
-    const confirmRedirect = confirm("Este contenido completo está disponible en Patreon. Necesitas una suscripción para acceder. ¿Quieres continuar?");
-    if (confirmRedirect) {
-        window.open(currentItem.premiumLink, "_blank");
-    }
+    window.open(currentItem.premiumLink, "_blank");
 }
 /* =========================
    EVENTOS
