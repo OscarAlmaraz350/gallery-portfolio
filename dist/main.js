@@ -73,7 +73,15 @@ function renderGallery() {
         card.appendChild(img);
         card.appendChild(overlay);
         card.onclick = () => {
-            openModal(item, img);
+            anime({
+                targets: img,
+                scale: [1, 0.96, 1],
+                duration: 220,
+                easing: "easeOutQuad"
+            });
+            setTimeout(() => {
+                openModal(item, img);
+            }, 120);
         };
         if (item.isPremium) {
             const badge = document.createElement("div");
@@ -150,8 +158,8 @@ function openModal(item, imgElement) {
             left: targetRect.left,
             width: targetRect.width,
             height: targetRect.height,
-            duration: 400,
-            easing: "easeInOutQuad",
+            duration: 550,
+            easing: "cubicBezier(0.22, 1, 0.36, 1)",
             complete: () => {
                 clone.remove();
                 // Mostrar modal real
@@ -160,15 +168,15 @@ function openModal(item, imgElement) {
                     targets: ".modal-content",
                     scale: [0.95, 1],
                     opacity: [0, 1],
-                    duration: 250,
-                    easing: "easeOutQuad"
+                    duration: 350,
+                    easing: "cubicBezier(0.22, 1, 0.36, 1)"
                 });
                 anime({
                     targets: premiumBtn,
                     scale: [1, 1.05, 1],
                     duration: 600,
                     easing: "easeInOutQuad",
-                    delay: 300
+                    delay: 180
                 });
             }
         });
