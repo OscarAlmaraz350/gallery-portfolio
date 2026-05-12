@@ -28,13 +28,14 @@ body {
   align-items: center;
   justify-content: center;
 
-  padding: 40px 20px;
+  padding: clamp(24px, 6vw, 40px) 20px;
   text-align: center;
 }
 
 /* LOGO */
 .logo {
-  height: 350px;
+  width: min(350px, 70vw);
+  height: auto;
   object-fit: contain;
   margin-bottom: 15px;
 }
@@ -54,9 +55,9 @@ body {
 /* GALERÍA */
 .gallery {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
-  padding: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  gap: clamp(10px, 2vw, 16px);
+  padding: clamp(10px, 3vw, 20px);
 }
 
 .gallery img {
@@ -347,4 +348,62 @@ button:hover {
   letter-spacing: 1px;
 
   z-index: 2;
+}
+
+@media (max-width: 768px) {
+  .modal {
+    padding: 16px;
+  }
+
+  .modal-content {
+    max-width: 100%;
+    width: auto;
+    gap: 10px;
+  }
+
+  .modal-content img {
+    max-width: 100%;
+    max-height: 70vh;
+  }
+
+  .modal-info {
+    width: 100%;
+    max-width: 100%;
+    gap: 8px;
+  }
+
+  #modalTitle {
+    font-size: 1rem;
+  }
+
+  .btn {
+    font-size: 10px;
+    padding: 6px 10px;
+  }
+
+  .premium-note {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-info {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  #modalTitle {
+    order: -1;
+    width: 100%;
+    text-align: center;
+  }
+
+  #downloadBtn,
+  .premium-wrapper {
+    margin: 0;
+  }
+
+  .modal-content img {
+    max-height: 65vh;
+  }
 }
