@@ -11,7 +11,7 @@ const items = [
         description: "Este es mi primer dibujo",
         filename: "dibujo-1.jpg",
         premiumLink: "https://www.patreon.com/tu_usuario",
-        isPremium: true
+        isPremium: true,
     },
     {
         id: 2,
@@ -20,7 +20,7 @@ const items = [
         description: "Otro dibujo",
         filename: "dibujo-2.jpg",
         premiumLink: "https://www.patreon.com/tu_usuario",
-        isPremium: false
+        isPremium: false,
     },
     {
         id: 3,
@@ -29,8 +29,8 @@ const items = [
         description: "Un tercer dibujo",
         filename: "dibujo-3.jpg",
         premiumLink: "https://www.patreon.com/tu_usuario",
-        isPremium: false
-    }
+        isPremium: false,
+    },
 ];
 /* =========================
    ESTADO
@@ -57,7 +57,7 @@ if (premiumBtn) {
 ========================= */
 function renderGallery() {
     gallery.innerHTML = "";
-    items.forEach(item => {
+    items.forEach((item) => {
         const card = document.createElement("div");
         card.className = "gallery-item";
         const img = document.createElement("img");
@@ -73,11 +73,15 @@ function renderGallery() {
         card.appendChild(img);
         card.appendChild(overlay);
         card.onclick = () => {
+            anime.remove(img);
             anime({
                 targets: img,
                 scale: [1, 0.96, 1],
                 duration: 220,
-                easing: "easeOutQuad"
+                easing: "easeOutQuad",
+                complete: () => {
+                    img.style.transform = "";
+                },
             });
             setTimeout(() => {
                 openModal(item, img);
@@ -96,7 +100,7 @@ function renderGallery() {
                 translateY: [20, 0],
                 opacity: [0, 1],
                 duration: 400,
-                easing: "easeOutQuad"
+                easing: "easeOutQuad",
             });
         });
         card.addEventListener("mouseleave", () => {
@@ -112,6 +116,7 @@ function renderGallery() {
 ========================= */
 function openModal(item, imgElement) {
     currentItem = item;
+    modal.classList.toggle("modal-premium", Boolean(item.isPremium));
     currentImgElement = imgElement;
     document.body.classList.add("modal-open");
     document.body.style.overflow = "hidden";
@@ -169,16 +174,17 @@ function openModal(item, imgElement) {
                     scale: [0.95, 1],
                     opacity: [0, 1],
                     duration: 350,
-                    easing: "cubicBezier(0.22, 1, 0.36, 1)"
+                    easing: "cubicBezier(0.22, 1, 0.36, 1)",
                 });
                 anime({
                     targets: premiumBtn,
                     scale: [1, 1.05, 1],
                     duration: 600,
                     easing: "easeInOutQuad",
-                    delay: 180
+                    delay: 180,
                 });
-            }
+                modal.classList.remove("modal-premium");
+            },
         });
     });
 }
@@ -216,7 +222,11 @@ function closeModal() {
         complete: () => {
             clone.remove();
             modal.classList.remove("show");
-        }
+            if (currentImgElement) {
+                anime.remove(currentImgElement);
+                currentImgElement.style.transform = "";
+            }
+        },
     });
     document.body.classList.remove("modal-open");
     document.body.style.overflow = "";
