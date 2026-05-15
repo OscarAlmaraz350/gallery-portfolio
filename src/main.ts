@@ -45,6 +45,33 @@ const items: GalleryItem[] = [
     premiumLink: "https://www.patreon.com/tu_usuario",
     isPremium: false,
   },
+  {
+    id: 4,
+    image: "assets/dibujo4.jpg",
+    title: "MISIDE: MITA",
+    description: "Este es mi primer dibujo",
+    filename: "dibujo-1.jpg",
+    premiumLink: "https://www.patreon.com/tu_usuario",
+    isPremium: true,
+  },
+  {
+    id: 5,
+    image: "assets/dibujo5.jpg",
+    title: "RAORA PANTHERA: NURSE OUTFIT",
+    description: "Otro dibujo",
+    filename: "dibujo-2.jpg",
+    premiumLink: "https://www.patreon.com/tu_usuario",
+    isPremium: false,
+  },
+  {
+    id: 6,
+    image: "assets/dibujo6.jpg",
+    title: "SAYNOZ X SLUMLORD: CROSS",
+    description: "Un tercer dibujo",
+    filename: "dibujo-3.jpg",
+    premiumLink: "https://www.patreon.com/tu_usuario",
+    isPremium: false,
+  },
 ];
 
 /* =========================
@@ -83,6 +110,8 @@ function renderGallery() {
     const img = document.createElement("img");
     img.src = item.image;
     img.alt = item.title;
+    img.loading = "lazy";
+    img.decoding = "async";
 
     const overlay = document.createElement("div");
     overlay.className = "overlay";
