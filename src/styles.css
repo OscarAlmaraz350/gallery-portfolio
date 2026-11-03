@@ -43,25 +43,9 @@ body {
 /* GALERÍA */
 .gallery {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
   gap: clamp(10px, 2vw, 16px);
   padding: clamp(10px, 3vw, 20px);
-
-  width: 100%;
-  box-sizing: border-box;
-  align-items: start;
-}
-
-@media (max-width: 900px) {
-  .gallery {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 560px) {
-  .gallery {
-    grid-template-columns: 1fr;
-  }
 }
 
 .gallery img {
@@ -246,10 +230,6 @@ button:hover {
   flex-shrink: 0;
 }
 
-#premiumBtn {
-  justify-self: end;
-}
-
 .btn {
   position: relative;
   padding: 6px 12px;
@@ -301,7 +281,6 @@ button:hover {
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
-  justify-self: end;
 }
 
 .btn-premium:active {
@@ -360,39 +339,11 @@ button:hover {
 
   z-index: 2;
 }
-@media (max-width: 480px) {
-  .modal-content img {
-    max-height: 62vh;
-  }
 
-  .modal-info {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  #modalTitle {
-    order: -1;
-    width: 100%;
-    text-align: center;
-  }
-
-  #downloadBtn,
-  .premium-wrapper {
-    margin: 0;
-  }
-
-  .premium-wrapper {
-    align-items: center;
-  }
-
-  .premium-note {
-    text-align: center;
-  }
-}
+/* TABLETS */
 @media (max-width: 768px) {
   .modal {
     padding: 16px;
-    backdrop-filter: blur(10px);
   }
 
   .modal-content {
@@ -405,18 +356,22 @@ button:hover {
     max-height: 68vh;
   }
 
+  .modal.modal-premium .modal-content img {
+    max-height: 60vh;
+  }
+
   .modal-info {
     width: 100%;
     max-width: 100%;
     gap: 8px;
   }
+
   .premium-wrapper {
     max-width: 180px;
   }
-  .modal.modal-premium .modal-content img {
-    max-height: 60vh;
-  }
 }
+
+/* MOBILE */
 @media (max-width: 480px) {
   .modal-content img {
     max-height: 60vh;
@@ -439,15 +394,24 @@ button:hover {
   }
 
   .premium-wrapper {
+    width: 100%;
     align-items: center;
   }
 
   .premium-note {
+    max-width: 220px;
     text-align: center;
-    max-width: 180px;
+    line-height: 1.3;
+  }
+
+  #premiumBtn {
+    max-width: 220px;
+    white-space: normal;
+    text-align: center;
   }
 }
 
+/* TOUCH DEVICES */
 @media (hover: none) {
   .overlay {
     opacity: 1;
@@ -467,24 +431,5 @@ button:hover {
     transform: none;
     filter: none;
     box-shadow: none;
-  }
-}
-
-@media (max-width: 480px) {
-  .premium-wrapper {
-    width: 100%;
-    align-items: center;
-  }
-
-  .premium-note {
-    max-width: 220px;
-    text-align: center;
-    line-height: 1.3;
-  }
-
-  #premiumBtn {
-    max-width: 220px;
-    white-space: normal;
-    text-align: center;
   }
 }

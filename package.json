@@ -1,18 +1,16 @@
 {
-  "name": "portfoliodibujo",
+  "name": "gallery-portfolio",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
+  "description": "Illustration gallery portfolio",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "animejs": "^4.3.6"
+    "clean": "node scripts/clean.mjs",
+    "build": "npm run clean && tsc -p tsconfig.json && node scripts/copy-static.mjs"
   },
   "devDependencies": {
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.2"
+  },
+  "dependencies": {
+    "animejs": "4.5.0"
   }
 }

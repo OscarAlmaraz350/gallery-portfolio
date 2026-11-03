@@ -1,51 +1,123 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mi Portafolio</title>
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SAYNOZ | [Waifu Material] Artist 🐙</title>
+    <meta
+      name="description"
+      content="Explore digital illustrations, anime-inspired artwork and original creations by Saynoz."
+    />
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="SAYNOZ | Anime & Digital Artist" />
+    <meta
+      property="og:description"
+      content="Explore anime-inspired digital illustrations, original characters and artwork by Saynoz."
+    />
+    <meta
+      property="og:image"
+      content="https://TU-DOMINIO/assets/og-image.jpg"
+    />
 
-<header class="hero">
-  <div class="logo-container">
-    <img src="./assets/saynozlogo.png" alt="Mi Logo" class="logo" />
-  </div>
-
-  <div class="socials">
-    <a href="#" target="_blank" aria-label="Instagram">IG</a>
-    <a href="#" target="_blank" aria-label="Twitter">X</a>
-    <a href="#" target="_blank" aria-label="Patreon">PATREON</a>
-  </div>
-</header>
-
-
-<main>
-  <!-- GALERÍA -->
-  <section id="gallery" class="gallery">
-    <!-- Aquí se insertarán imágenes dinámicamente -->
-  </section>
-</main>
-
-<!-- MODAL -->
-<div id="modal" class="modal">
-  <div class="modal-content">
-      
-      <img id="modalImage" alt="Imagen grande"/>
-      <div class="modal-info">
-        <p id="modalDesc"></p>
-
-        <button id="downloadBtn" class="btn">DOWNLOAD</button>
-        <h2 id="modalTitle"></h2>
-        <button id="premiumBtn" class="btn btn-premium"></button>
-        <small id="premiumNote" class="premium-note"></small>
-        <button id="closeModal"></button>
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="SAYNOZ | Anime & Digital Artist" />
+    <meta
+      name="twitter:description"
+      content="Explore anime-inspired digital illustrations, original characters and artwork by Saynoz."
+    />
+    <meta
+      name="twitter:image"
+      content="https://TU-DOMINIO/assets/og-image.jpg"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="logo-container">
+        <img
+          src="./assets/saynozlogo.webp"
+          alt="Saynoz artist logo"
+          class="logo"
+        />
       </div>
-  </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/animejs/lib/anime.min.js"></script>
-<script type="module" src="../dist/main.js"></script>
-</body>
+      <div class="socials">
+        <a
+          href="https://www.instagram.com/saynoz_morestuff/"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Instagram"
+          >IG</a
+        >
+        <a
+          href="https://x.com/saynoz_stuff"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Twitter"
+          >X</a
+        >
+        <a
+          href="https://www.pixiv.net/en/users/121580254"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Pixiv"
+          >PIXIV</a
+        >
+      </div>
+    </header>
+
+    <main>
+      <!-- GALERÍA -->
+      <section id="gallery" class="gallery">
+        <!-- Aquí se insertarán imágenes dinámicamente -->
+      </section>
+    </main>
+
+    <!-- MODAL -->
+    <div
+      id="modal"
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modalTitle"
+      aria-describedby="modalDesc"
+      aria-hidden="true"
+      tabindex="-1"
+    >
+      <div class="modal-content">
+        <img id="modalImage" alt="" />
+
+        <div class="modal-info">
+          <p id="modalDesc"></p>
+
+          <button id="downloadBtn" class="btn" type="button">DOWNLOAD</button>
+
+          <h2 id="modalTitle"></h2>
+
+          <button
+            id="premiumBtn"
+            class="btn btn-premium"
+            type="button"
+          ></button>
+
+          <small id="premiumNote" class="premium-note"></small>
+
+          <button id="closeModal" type="button" aria-label="Close image viewer">
+            &times;
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "animejs": "./vendor/animejs/index.js"
+        }
+      }
+    </script>
+    <script type="module" src="./main.js"></script>
+  </body>
 </html>
