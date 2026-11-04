@@ -8,6 +8,7 @@ let previouslyFocusedElement: HTMLElement | null = null;
 type GalleryItem = {
   id: number;
   image: string;
+  thumbnail: string;
   title: string;
   description: string;
   filename: string;
@@ -22,6 +23,7 @@ const items: GalleryItem[] = [
   {
     id: 1,
     image: "assets/dibujo1.webp",
+    thumbnail: "assets/dibujo1-thumb.webp",
     title: "MISIDE: MITA",
     description: "Este es mi primer dibujo",
     filename: "dibujo-1.webp",
@@ -32,6 +34,7 @@ const items: GalleryItem[] = [
     id: 2,
     image: "assets/dibujo2.webp",
     title: "RAORA PANTHERA: NURSE OUTFIT",
+    thumbnail: "assets/dibujo2-thumb.webp",
     description: "Otro dibujo",
     filename: "dibujo-2.webp",
     premiumLink: "https://www.patreon.com/tu_usuario",
@@ -40,6 +43,7 @@ const items: GalleryItem[] = [
   {
     id: 3,
     image: "assets/dibujo3.webp",
+    thumbnail: "assets/dibujo3-thumb.webp",
     title: "SAYNOZ X SLUMLORD: CROSS",
     description: "Un tercer dibujo",
     filename: "dibujo-3.webp",
@@ -68,7 +72,6 @@ const closeBtn = document.getElementById("closeModal")!;
 const downloadBtn = document.getElementById("downloadBtn")!;
 const premiumBtn = document.getElementById("premiumBtn")! as HTMLButtonElement;
 
-
 /* =========================
    RENDER
 ========================= */
@@ -82,7 +85,8 @@ function renderGallery() {
     card.setAttribute("tabindex", "0");
     card.setAttribute("aria-label", `Open ${item.title}: ${item.description}`);
     const img = document.createElement("img");
-    img.src = item.image;
+
+    img.src = item.thumbnail;
     img.alt = `${item.title} — ${item.description}`;
     img.loading = "lazy";
     img.decoding = "async";
@@ -170,7 +174,7 @@ function openModal(item: GalleryItem, imgElement: HTMLImageElement) {
 
   // Crear clon
   const clone = document.createElement("img");
-  clone.src = item.image;
+  clone.src = imgElement.currentSrc || item.thumbnail;
 
   clone.style.position = "fixed";
   clone.style.top = rect.top + "px";
