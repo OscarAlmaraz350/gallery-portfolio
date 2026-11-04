@@ -8,30 +8,27 @@ const items = [
     {
         id: 1,
         image: "assets/dibujo1.webp",
-        originalImage: "originals/dibujo1.jpg",
         title: "MISIDE: MITA",
         description: "Este es mi primer dibujo",
-        filename: "dibujo-1.jpg",
+        filename: "dibujo-1.webp",
         premiumLink: "https://www.patreon.com/tu_usuario",
         isPremium: true,
     },
     {
         id: 2,
         image: "assets/dibujo2.webp",
-        originalImage: "originals/dibujo2.jpg",
         title: "RAORA PANTHERA: NURSE OUTFIT",
         description: "Otro dibujo",
-        filename: "dibujo-2.jpg",
+        filename: "dibujo-2.webp",
         premiumLink: "https://www.patreon.com/tu_usuario",
         isPremium: false,
     },
     {
         id: 3,
         image: "assets/dibujo3.webp",
-        originalImage: "originals/dibujo3.jpg",
         title: "SAYNOZ X SLUMLORD: CROSS",
         description: "Un tercer dibujo",
-        filename: "dibujo-3.jpg",
+        filename: "dibujo-3.webp",
         premiumLink: "https://www.patreon.com/tu_usuario",
         isPremium: false,
     },
@@ -130,6 +127,7 @@ function openModal(item, imgElement) {
     currentItem = item;
     modal.classList.toggle("modal-premium", Boolean(item.isPremium));
     currentImgElement = imgElement;
+    modal.removeAttribute("inert");
     modal.setAttribute("aria-hidden", "false");
     document.body.classList.add("modal-open");
     document.body.style.overflow = "hidden";
@@ -207,6 +205,7 @@ function closeModal() {
     if (!currentImgElement) {
         modal.classList.remove("modal-premium");
         modal.setAttribute("aria-hidden", "true");
+        modal.setAttribute("inert", "");
         document.body.classList.remove("modal-open");
         document.body.style.overflow = "";
         previouslyFocusedElement?.focus();
@@ -261,8 +260,9 @@ function closeModal() {
 function downloadImage() {
     if (!currentItem)
         return;
+    // Descargar únicamente la versión pública en WebP
     const a = document.createElement("a");
-    a.href = currentItem.originalImage;
+    a.href = currentItem.image;
     a.download = currentItem.filename;
     a.click();
 }
