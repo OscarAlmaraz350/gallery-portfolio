@@ -57,6 +57,54 @@ const items: GalleryItem[] = [
 ========================= */
 let currentItem: GalleryItem | null = null;
 
+// Caché de imágenes completas
+const imageCache = new Map<string, Promise<boolean>>();
+
+// Identificador para evitar actualizaciones de modales anteriores
+let modalRequestId = 0;
+
+function preloadFullImage(src: string): Promise<boolean> {
+  const cached = imageCache.get(src);
+
+  if (cached) {
+    return cached;
+  }
+
+  const request = new Promise<boolean>((resolve) => {
+    const image = new Image();
+
+    image.onload = async () => {
+      try {
+        await image.decode();
+      } catch {
+        // Si decode falla, la imagen ya terminó de cargar.
+      }
+
+      resolve(true);
+    };
+
+    image.onerror = () => {
+      resolve(false);
+    };
+
+    image.src = src;
+  });
+
+  imageCache.set(src, request);
+
+  // Permitir un nuevo intento si ocurre un error
+  void request.then((success) => {
+    if (!success) {
+      imageCache.delete(src);
+    }
+  });
+
+  return request;
+}
+
+type ModalState = "closed" | "opening" | "open" | "closing";
+
+let modalState: ModalState = "closed";
 /* =========================
    DOM
 ========================= */
@@ -103,6 +151,10 @@ function renderGallery() {
     card.appendChild(overlay);
 
     card.onclick = () => {
+      if (modalState !== "closed") return;
+
+      modalState = "opening";
+
       utils.remove(img);
 
       animate(img, {
@@ -132,6 +184,35 @@ function renderGallery() {
 
       card.appendChild(badge);
     }
+    // Precarga con una pequeña espera para evitar descargas accidentales
+    let preloadTimer: ReturnType<typeof setTimeout> | undefined;
+
+    card.addEventListener("pointerenter", (event: PointerEvent) => {
+      if (event.pointerType !== "mouse") return;
+
+      preloadTimer = setTimeout(() => {
+        void preloadFullImage(item.image);
+      }, 150);
+    });
+
+    card.addEventListener("pointerleave", () => {
+      clearTimeout(preloadTimer);
+    });
+
+    // Precarga al navegar mediante teclado
+    card.addEventListener("focus", () => {
+      void preloadFullImage(item.image);
+    });
+
+    // En pantallas táctiles, anticipar la carga al tocar
+    card.addEventListener(
+      "touchstart",
+      () => {
+        void preloadFullImage(item.image);
+      },
+      { passive: true },
+    );
+
     card.addEventListener("mouseenter", () => {
       const text = card.querySelector(".overlay-title");
 
@@ -191,8 +272,25 @@ function openModal(item: GalleryItem, imgElement: HTMLImageElement) {
   modal.classList.add("show");
   modal.style.opacity = "0";
   closeBtn.focus();
-  modalImage.src = item.image;
+  // Mostrar inmediatamente la miniatura
+  modalImage.src = imgElement.currentSrc || item.thumbnail;
   modalImage.alt = `${item.title} — ${item.description}`;
+
+  // Identificar esta apertura del modal
+  const requestId = ++modalRequestId;
+
+  // Cargar la imagen completa sin bloquear la animación
+  void preloadFullImage(item.image).then((success) => {
+    if (!success) return;
+
+    // Evitar que una carga anterior afecte otro modal
+    if (requestId !== modalRequestId) return;
+
+    if (currentItem?.id !== item.id) return;
+
+    // Reemplazar la miniatura por la imagen completa
+    modalImage.src = item.image;
+  });
 
   modalTitle.textContent = item.title;
 
@@ -241,6 +339,9 @@ function openModal(item: GalleryItem, imgElement: HTMLImageElement) {
           opacity: [0, 1],
           duration: 350,
           ease: cubicBezier(0.22, 1, 0.36, 1),
+          onComplete: () => {
+            modalState = "open";
+          },
         });
         animate(premiumBtn, {
           scale: [1, 1.05, 1],
@@ -254,16 +355,21 @@ function openModal(item: GalleryItem, imgElement: HTMLImageElement) {
 }
 
 function closeModal() {
+  // Invalidar actualizaciones de imágenes pendientes
+modalRequestId++;
+  if (modalState !== "open") return;
+
+  modalState = "closing";
   if (!currentImgElement) {
     modal.classList.remove("modal-premium");
     modal.setAttribute("aria-hidden", "true");
-    modal.setAttribute("inert", "");
     document.body.classList.remove("modal-open");
     document.body.style.overflow = "";
 
     previouslyFocusedElement?.focus();
     previouslyFocusedElement = null;
     currentItem = null;
+    modalState = "closed";
 
     return;
   }
@@ -308,11 +414,16 @@ function closeModal() {
 
       modal.setAttribute("aria-hidden", "true");
 
+      modal.setAttribute("inert", "");
+      modal.classList.remove("modal-premium");
+
       elementToRestoreFocus?.focus();
 
       previouslyFocusedElement = null;
       currentImgElement = null;
       currentItem = null;
+
+      modalState = "closed";
     },
   });
 
